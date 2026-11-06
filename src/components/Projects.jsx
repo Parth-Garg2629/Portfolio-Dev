@@ -1,111 +1,183 @@
-import React from 'react';
-import { GraduationCap, Briefcase, GitBranch, ExternalLink } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Github, ExternalLink, Archive, Calendar } from 'lucide-react';
+import config from '../config';
 
-const experiences = [
-  {
-    emoji: '🎓',
-    icon: GraduationCap,
-    role: 'B.Tech in Computer Science',
-    org: 'YOUR UNIVERSITY NAME',
-    period: '2022 – Present',
-    type: 'Education',
-    description: 'Pursuing core Computer Science fundamentals including Data Structures & Algorithms, Operating Systems, Database Management Systems, Computer Networks, and Object Oriented Programming. Applying academic knowledge to build real-world AI-powered applications simultaneously.',
-    highlights: [
-      'Strong foundation in DSA — solved 100+ problems across platforms',
-      'Applied OS and DBMS concepts in real project (Supabase + PostgreSQL)',
-      'Consistent academic performance while shipping side projects'
-    ],
-    tags: ['DSA', 'OS', 'DBMS', 'Networks', 'OOP', 'C++', 'Java'],
-    link: null
-  },
-  {
-    emoji: '🚀',
-    icon: Briefcase,
-    role: 'Lead Developer — AI Style Mirror',
-    org: 'Self Initiated Project',
-    period: '2025 – Present',
-    type: 'Project Lead',
-    description: 'Designed, built, and deployed an end-to-end AI fashion styling web application. Integrated Claude Vision API for real-time body analysis, built a Canvas-based virtual try-on feature from scratch, implemented weather-aware outfit generation using OpenWeather API, and set up a persistent user profile system using Supabase and PostgreSQL.',
-    highlights: [
-      'Integrated Claude Vision for body shape analysis and style recommendations',
-      'Built Canvas API virtual try-on — no library, custom pixel manipulation',
-      'Shipped 10 features including PWA, offline mode, and ML feedback loop'
-    ],
-    tags: ['Claude API', 'Supabase', 'Canvas API', 'Vite', 'Vanilla JS', 'Vercel'],
-    link: 'https://github.com/Raghvendrasingh-CS'
-  },
-  {
-    emoji: '💻',
-    icon: GitBranch,
-    role: 'Open Source Contributor',
-    org: 'GitHub — Raghvendrasingh-CS',
-    period: '2024 – Present',
-    type: 'Open Source',
-    description: 'Actively maintaining public repositories and contributing to the open source ecosystem. Writing professional documentation, maintaining clean commit history, and building projects that others can learn from and build on top of.',
-    highlights: [
-      'Public repos with proper README, setup guides, and architecture notes',
-      'Clean commit history and branch management practices',
-      'Projects used as reference by peers and fellow CS students'
-    ],
-    tags: ['Git', 'GitHub', 'Documentation', 'Open Source', 'Markdown'],
-    link: 'https://github.com/Raghvendrasingh-CS'
-  }
-];
+function getInitials(title) {
+  return title
+    .split(/[\s-]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0].toUpperCase())
+    .join('');
+}
 
 function Projects() {
+  const sectionRef = useRef(null);
+  const lineRef = useRef(null);
+  const [lineHeight, setLineHeight] = useState(0);
+
+  const projects = config.projects;
+  const archive = config.archive || [];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!sectionRef.current || !lineRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const sectionHeight = sectionRef.current.offsetHeight;
+      const scrolled = Math.max(0, windowHeight - rect.top);
+      const progress = Math.min(scrolled / (sectionHeight + windowHeight * 0.5), 1);
+      setLineHeight(progress * 100);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <section className="section" id="projects">
+    <section className="section" id="projects" ref={sectionRef}>
       <div className="container">
         <div className="section-header reveal">
-          <span className="section-label">03.</span>
-          <h2 className="section-title">Experience</h2>
+          <span className="section-label">02.</span>
+          <h2 className="section-title">Projects</h2>
         </div>
 
-        <div className="exp-cards-list">
-          {experiences.map((exp, idx) => {
-            const Icon = exp.icon;
-            return (
-              <div className="exp-card reveal" key={idx}>
-                <div className="exp-card-left">
-                  <div className="exp-emoji">{exp.emoji}</div>
-                  <div className="exp-period-badge">{exp.period}</div>
-                  <div className="exp-type-label">{exp.type}</div>
-                </div>
+        <p className="projects-subtext reveal stagger-1">
+          Highlighted applications engineered with modern frontend frameworks, scalable backends, and AI integrations.
+        </p>
 
-                <div className="exp-card-right">
-                  <div className="exp-card-header">
-                    <div>
-                      <h3 className="exp-role">{exp.role}</h3>
-                      <p className="exp-org">{exp.org}</p>
+        <div className="proj-timeline">
+          {/* Animated vertical track bar */}
+          <div className="proj-timeline-track">
+            <div
+              className="proj-timeline-fill"
+              ref={lineRef}
+              style={{ height: `${lineHeight}%` }}
+            />
+          </div>
+
+          {/* Project entries */}
+          <div className="proj-list">
+            {projects.map((project, idx) => (
+              <div className="proj-item reveal" key={idx}>
+                <div className="proj-dot" />
+                <div className={`proj-card ${project.featured ? 'proj-card--featured' : ''}`}>
+                  {/* Magic UI animated border beam placeholder */}
+                  {project.featured && <div className="border-beam" aria-hidden="true" />}
+
+                  {/* Thumbnail / Gradient Initials Tile */}
+                  {project.image ? (
+                    <div className="proj-thumb-wrapper">
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="proj-thumb"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      />
                     </div>
-                    {exp.link && (
-                      <a href={exp.link} target="_blank" rel="noopener noreferrer" className="exp-link-btn">
-                        <ExternalLink size={14} />
-                      </a>
-                    )}
-                  </div>
+                  ) : (
+                    <div className="proj-initial-tile">
+                      <span className="proj-initial-text">{getInitials(project.title)}</span>
+                      {project.date && (
+                        <span className="proj-initial-meta">
+                          <Calendar size={12} style={{ display: 'inline', marginRight: '4px' }} />
+                          {project.date}
+                        </span>
+                      )}
+                    </div>
+                  )}
 
-                  <p className="exp-desc">{exp.description}</p>
+                  <div className="proj-card-inner">
+                    <div className="proj-card-top">
+                      <span className="proj-number">{project.number}</span>
+                      {project.featured && (
+                        <span className="proj-featured-badge">⭐ Featured Project</span>
+                      )}
+                    </div>
 
-                  <ul className="exp-highlights">
-                    {exp.highlights.map((h, hIdx) => (
-                      <li key={hIdx} className="exp-highlight-item">
-                        <span className="exp-bullet">▸</span>
-                        {h}
-                      </li>
-                    ))}
-                  </ul>
+                    <h3 className="proj-title">{project.title}</h3>
+                    <p className="proj-subtitle">{project.subtitle}</p>
+                    <p className="proj-desc">{project.description}</p>
 
-                  <div className="exp-tags">
-                    {exp.tags.map((tag, tIdx) => (
-                      <span className="tag" key={tIdx}>{tag}</span>
-                    ))}
+                    <div className="proj-tags">
+                      {project.tags.map((tag, tIdx) => (
+                        <span className="tag" key={tIdx}>{tag}</span>
+                      ))}
+                    </div>
+
+                    {/* Clear Button Hierarchy: Live Demo = primary amber, Code = outline */}
+                    <div className="proj-links">
+                      {project.live && (
+                        <a
+                          href={project.live}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-primary proj-btn"
+                        >
+                          <ExternalLink size={15} /> Live Demo
+                        </a>
+                      )}
+                      {project.github && (
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-outline proj-btn"
+                        >
+                          <Github size={15} /> Code
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
+
+        {/* Project Archive (Part D3) */}
+        {archive.length > 0 && (
+          <div className="archive-section reveal stagger-3">
+            <div className="archive-header">
+              <Archive size={18} className="archive-icon" />
+              <h3 className="archive-title">Project Archive</h3>
+              <span className="archive-badge">{archive.length} Older Works</span>
+            </div>
+            <div className="archive-table-container">
+              <table className="archive-table">
+                <thead>
+                  <tr>
+                    <th>Year</th>
+                    <th>Project</th>
+                    <th>Built With</th>
+                    <th style={{ textAlign: 'right' }}>Link</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {archive.map((item, aIdx) => (
+                    <tr key={aIdx} className="archive-row">
+                      <td className="archive-year">{item.year}</td>
+                      <td className="archive-project-name">{item.project}</td>
+                      <td className="archive-tech">{item.builtWith}</td>
+                      <td style={{ textAlign: 'right' }}>
+                        <a
+                          href={item.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="archive-link-btn"
+                          aria-label={`View ${item.project} on GitHub`}
+                        >
+                          <ExternalLink size={14} />
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

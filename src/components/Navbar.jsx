@@ -8,13 +8,16 @@ function Navbar() {
 
   useEffect(() => {
     const sections = document.querySelectorAll('section[id]');
-    const sectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    }, { rootMargin: '-40% 0px -55% 0px' });
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: '-30% 0px -50% 0px' }
+    );
     sections.forEach((s) => sectionObserver.observe(s));
     return () => sectionObserver.disconnect();
   }, []);
@@ -28,7 +31,7 @@ function Navbar() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -56,6 +59,17 @@ function Navbar() {
     setIsOpen(false);
   };
 
+  const navItems = [
+    { id: 'about', label: 'About' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'experience', label: 'Experience' },
+    { id: 'tech-stack', label: 'Tech Stack' },
+    { id: 'github-activity', label: 'GitHub' },
+    { id: 'ask-me', label: 'Ask Me' },
+    { id: 'web-presence', label: 'Network' },
+    { id: 'contact', label: 'Contact' }
+  ];
+
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="container nav-container">
@@ -68,22 +82,33 @@ function Navbar() {
 
         {/* Desktop Menu */}
         <ul className="nav-links">
-          <li><a href="#about" className={`nav-link ${activeSection === 'about' ? 'active' : ''}`} onClick={(e) => handleLinkClick(e, 'about')}>About</a></li>
-          <li><a href="#experience" className={`nav-link ${activeSection === 'experience' ? 'active' : ''}`} onClick={(e) => handleLinkClick(e, 'experience')}>Experience</a></li>
-          <li><a href="#projects" className={`nav-link ${activeSection === 'projects' ? 'active' : ''}`} onClick={(e) => handleLinkClick(e, 'projects')}>Projects</a></li>
-          <li><a href="#tech-stack" className={`nav-link ${activeSection === 'tech-stack' ? 'active' : ''}`} onClick={(e) => handleLinkClick(e, 'tech-stack')}>Tech Stack</a></li>
-          <li><a href="#web-presence" className={`nav-link ${activeSection === 'web-presence' ? 'active' : ''}`} onClick={(e) => handleLinkClick(e, 'web-presence')}>Network</a></li>
-          <li><a href="#ask-me" className={`nav-link ${activeSection === 'ask-me' ? 'active' : ''}`} onClick={(e) => handleLinkClick(e, 'ask-me')}>Ask Me</a></li>
-          <li><a href="#contact" className={`nav-link ${activeSection === 'contact' ? 'active' : ''}`} onClick={(e) => handleLinkClick(e, 'contact')}>Contact</a></li>
+          {navItems.map((item) => (
+            <li key={item.id}>
+              <a
+                href={`#${item.id}`}
+                className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
+                onClick={(e) => handleLinkClick(e, item.id)}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
           <li>
-            <button className="btn btn-primary nav-cta" onClick={(e) => handleLinkClick(e, 'contact')}>
+            <button
+              className="btn btn-primary nav-cta"
+              onClick={(e) => handleLinkClick(e, 'contact')}
+            >
               Hire Me
             </button>
           </li>
         </ul>
 
         {/* Mobile Hamburger Toggle */}
-        <button className="nav-toggle" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle menu">
+        <button
+          className="nav-toggle"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle menu"
+        >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -91,15 +116,23 @@ function Navbar() {
       {/* Mobile Dropdown Menu */}
       <div className={`mobile-menu ${isOpen ? 'open' : ''}`}>
         <ul className="mobile-nav-links">
-          <li><a href="#about" className={`mobile-nav-link ${activeSection === 'about' ? 'active' : ''}`} onClick={(e) => handleLinkClick(e, 'about')}>About</a></li>
-          <li><a href="#experience" className={`mobile-nav-link ${activeSection === 'experience' ? 'active' : ''}`} onClick={(e) => handleLinkClick(e, 'experience')}>Experience</a></li>
-          <li><a href="#projects" className={`mobile-nav-link ${activeSection === 'projects' ? 'active' : ''}`} onClick={(e) => handleLinkClick(e, 'projects')}>Projects</a></li>
-          <li><a href="#tech-stack" className={`mobile-nav-link ${activeSection === 'tech-stack' ? 'active' : ''}`} onClick={(e) => handleLinkClick(e, 'tech-stack')}>Tech Stack</a></li>
-          <li><a href="#web-presence" className={`mobile-nav-link ${activeSection === 'web-presence' ? 'active' : ''}`} onClick={(e) => handleLinkClick(e, 'web-presence')}>Network</a></li>
-          <li><a href="#ask-me" className={`mobile-nav-link ${activeSection === 'ask-me' ? 'active' : ''}`} onClick={(e) => handleLinkClick(e, 'ask-me')}>Ask Me</a></li>
-          <li><a href="#contact" className={`mobile-nav-link ${activeSection === 'contact' ? 'active' : ''}`} onClick={(e) => handleLinkClick(e, 'contact')}>Contact</a></li>
+          {navItems.map((item) => (
+            <li key={item.id}>
+              <a
+                href={`#${item.id}`}
+                className={`mobile-nav-link ${activeSection === item.id ? 'active' : ''}`}
+                onClick={(e) => handleLinkClick(e, item.id)}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
           <li style={{ marginTop: '12px' }}>
-            <button className="btn btn-primary nav-cta" style={{ width: '100%' }} onClick={(e) => handleLinkClick(e, 'contact')}>
+            <button
+              className="btn btn-primary nav-cta"
+              style={{ width: '100%' }}
+              onClick={(e) => handleLinkClick(e, 'contact')}
+            >
               Hire Me
             </button>
           </li>

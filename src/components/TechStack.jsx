@@ -1,64 +1,66 @@
 import React from 'react';
+import { Terminal, Laptop, Wrench } from 'lucide-react';
+import config from '../config';
 
 const techCategories = [
   {
     category: 'AI & APIs',
-    color: '#7C3AED',
     techs: [
-      { name: 'Claude API', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Anthropic_logo.svg/120px-Anthropic_logo.svg.png' },
-      { name: 'OpenAI API', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/OpenAI_Logo.svg/120px-OpenAI_Logo.svg.png' },
+      { name: 'Gemini API', logo: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/google.svg' },
+      { name: 'Claude API', logo: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/anthropic.svg' },
+      { name: 'OpenAI API', logo: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/openai.svg' },
+      { name: 'Groq API', logo: null },
       { name: 'REST APIs', logo: null },
       { name: 'Prompt Eng.', logo: null }
     ]
   },
   {
     category: 'Frontend',
-    color: '#6D28D9',
     techs: [
-      { name: 'React', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/120px-React-icon.svg.png' },
-      { name: 'JavaScript', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/120px-Unofficial_JavaScript_logo_2.svg.png' },
-      { name: 'HTML5', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/120px-HTML5_logo_and_wordmark.svg.png' },
-      { name: 'CSS3', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/CSS3_logo_and_wordmark.svg/120px-CSS3_logo_and_wordmark.svg.png' },
-      { name: 'Tailwind', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/120px-Tailwind_CSS_Logo.svg.png' },
-      { name: 'Vite', logo: 'https://vitejs.dev/logo.svg' }
+      { name: 'React', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' },
+      { name: 'JavaScript', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
+      { name: 'HTML5', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg' },
+      { name: 'CSS3', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg' },
+      { name: 'Tailwind', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg' },
+      { name: 'Vite', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg' }
     ]
   },
   {
     category: 'Backend & DB',
-    color: '#5B21B6',
     techs: [
-      { name: 'Node.js', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/120px-Node.js_logo.svg.png' },
-      { name: 'Express.js', logo: null },
-      { name: 'Supabase', logo: 'https://seeklogo.com/images/S/supabase-logo-DCC676FFE2-seeklogo.com.png' },
-      { name: 'PostgreSQL', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/120px-Postgresql_elephant.svg.png' },
-      { name: 'MongoDB', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/MongoDB_Logo.svg/120px-MongoDB_Logo.svg.png' }
+      { name: 'Node.js', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg' },
+      { name: 'Express.js', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg' },
+      { name: 'PostgreSQL', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' },
+      { name: 'MongoDB', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg' },
+      { name: 'Supabase', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg' },
+      { name: 'Docker', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' }
     ]
   },
   {
     category: 'Tools & DevOps',
-    color: '#4C1D95',
     techs: [
-      { name: 'Git', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Git_icon.svg/120px-Git_icon.svg.png' },
-      { name: 'GitHub', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/120px-Octicons-mark-github.svg.png' },
-      { name: 'Vercel', logo: 'https://assets.vercel.com/image/upload/v1588805858/repositories/vercel/logo.png' },
-      { name: 'VS Code', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/120px-Visual_Studio_Code_1.35_icon.svg.png' },
-      { name: 'Figma', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Figma-logo.svg/120px-Figma-logo.svg.png' },
-      { name: 'Postman', logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c2/Postman_%28software%29.png' }
+      { name: 'Git', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' },
+      { name: 'GitHub', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg' },
+      { name: 'Vercel', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg' },
+      { name: 'VS Code', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg' },
+      { name: 'Figma', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg' },
+      { name: 'Postman', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg' }
     ]
   },
   {
     category: 'Languages',
-    color: '#7C3AED',
     techs: [
-      { name: 'Python', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/120px-Python-logo-notext.svg.png' },
-      { name: 'C++', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/120px-ISO_C%2B%2B_Logo.svg.png' },
-      { name: 'Java', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/30/Java_programming_language_logo.svg/120px-Java_programming_language_logo.svg.png' },
+      { name: 'Python', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
+      { name: 'C++', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg' },
+      { name: 'Java', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
       { name: 'SQL', logo: null }
     ]
   }
 ];
 
 function TechStack() {
+  const uses = config.uses || [];
+
   return (
     <section className="section" id="tech-stack">
       <div className="container">
@@ -67,10 +69,14 @@ function TechStack() {
           <h2 className="section-title">Tech Stack</h2>
         </div>
 
+        <p className="techstack-subtext reveal stagger-1">
+          Languages, libraries, frameworks, and developer tools powering my projects.
+        </p>
+
         <div className="techstack-wrapper reveal">
           {techCategories.map((cat, cIdx) => (
             <div className="techstack-category" key={cIdx}>
-              <h3 className="techstack-category-title" style={{ color: cat.color }}>
+              <h3 className="techstack-category-title">
                 {cat.category}
               </h3>
               <div className="techstack-grid">
@@ -81,13 +87,19 @@ function TechStack() {
                         src={tech.logo}
                         alt={tech.name}
                         className="tech-logo"
-                        onError={(e) => { e.target.style.display = 'none'; }}
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          const fallback = e.currentTarget.parentElement.querySelector('.tech-logo-fallback');
+                          if (fallback) fallback.style.display = 'flex';
+                        }}
                       />
-                    ) : (
-                      <div className="tech-logo-placeholder">
-                        {tech.name.charAt(0)}
-                      </div>
-                    )}
+                    ) : null}
+                    <div
+                      className="tech-logo-fallback"
+                      style={{ display: tech.logo ? 'none' : 'flex' }}
+                    >
+                      {tech.name.charAt(0)}
+                    </div>
                     <span className="tech-name">{tech.name}</span>
                   </div>
                 ))}
@@ -95,6 +107,24 @@ function TechStack() {
             </div>
           ))}
         </div>
+
+        {/* My Setup / Uses List (Part D6b) */}
+        {uses.length > 0 && (
+          <div className="uses-section reveal stagger-3">
+            <div className="uses-header">
+              <Laptop size={18} className="uses-icon" />
+              <h3 className="uses-title">My Setup &amp; Daily Drivers</h3>
+            </div>
+            <div className="uses-grid">
+              {uses.map((item, uIdx) => (
+                <div className="uses-card" key={uIdx}>
+                  <span className="uses-category">// {item.category}</span>
+                  <span className="uses-tool">{item.tool}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
