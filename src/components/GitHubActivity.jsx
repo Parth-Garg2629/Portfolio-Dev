@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GitFork, Star, Users, FolderGit2, ExternalLink, RefreshCw } from 'lucide-react';
+import { GitFork, Star, Users, FolderGit2, ExternalLink } from 'lucide-react';
 import config from '../config';
 
 function GitHubActivity() {
@@ -33,7 +33,6 @@ function GitHubActivity() {
           following: user.following || 0
         });
 
-        // Filter out forks or keep top 4 by stars
         const sorted = (Array.isArray(repos) ? repos : [])
           .sort((a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0))
           .slice(0, 4);
@@ -62,7 +61,7 @@ function GitHubActivity() {
         </div>
 
         <p className="github-subtext reveal stagger-1">
-          Open source contributions, public repositories, and live commit telemetry from GitHub.
+          Open source contributions, public repositories, and live telemetry from GitHub.
         </p>
 
         {loading ? (
@@ -85,7 +84,7 @@ function GitHubActivity() {
               style={{ marginTop: '16px' }}
             >
               <ExternalLink size={16} />
-              View GitHub Profile (@{githubUsername})
+              View GitHub Profile
             </a>
           </div>
         ) : (
@@ -156,7 +155,7 @@ function GitHubActivity() {
             )}
 
             {/* Contribution Graph */}
-            {!imgError && (
+            {!imgError ? (
               <div className="github-chart-wrapper">
                 <div className="github-chart-header">
                   <span className="chart-label">// Contribution Activity</span>
@@ -172,11 +171,23 @@ function GitHubActivity() {
                 <div className="github-chart-scroll">
                   <img
                     src={`https://ghchart.rshah.org/E8A33D/${githubUsername}`}
-                    alt={`GitHub contributions chart for ${githubUsername}`}
+                    alt={`Contribution graph for ${githubUsername}`}
                     className="github-chart-img"
                     onError={() => setImgError(true)}
                   />
                 </div>
+              </div>
+            ) : (
+              <div className="github-fallback-card" style={{ marginTop: '20px' }}>
+                <a
+                  href={githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary"
+                >
+                  <ExternalLink size={16} />
+                  View GitHub Profile
+                </a>
               </div>
             )}
           </div>

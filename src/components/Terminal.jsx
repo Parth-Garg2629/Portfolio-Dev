@@ -34,7 +34,7 @@ function Terminal() {
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Auto-scroll
+  // Auto-scroll to bottom of terminal output
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [history]);
@@ -54,7 +54,7 @@ function Terminal() {
       return;
     }
 
-    // Add to history
+    // Append to command history for arrow navigation
     setCmdHistory((prev) => [...prev, trimmed]);
     setHistoryIndex(-1);
 
@@ -68,24 +68,24 @@ function Terminal() {
       case 'help':
         output = [
           'AVAILABLE COMMANDS:',
-          '  whoami       - Basic visitor info & owner details',
-          '  about        - Short professional bio',
-          '  projects     - List projects (or type project # to inspect)',
-          '  skills       - Grouped technology stack',
-          '  experience   - Education and leadership journey',
-          '  social       - Web presence and network links',
-          '  github       - Open GitHub profile in new tab',
-          '  resume       - View official resume PDF',
-          '  contact      - Scroll directly to contact section',
-          '  email        - Display direct email address',
-          '  theme <name> - Change site theme (amber, hacker, matrix, dracula, tokyo-night)',
-          '  date         - Current local date and time',
-          '  clear        - Clear terminal screen'
+          '  whoami         - View bio, role, college, and location',
+          '  about          - Read owner overview summary',
+          '  projects       - List portfolio projects (type project # or name for details)',
+          '  skills         - View languages, frontend, backend, tools, and AI',
+          '  experience     - Academic milestones and leadership roles',
+          '  social         - List social network and presence links',
+          '  github         - Open GitHub profile in new tab',
+          '  resume         - Open resume PDF in new tab',
+          '  contact        - Scroll to contact section',
+          '  email          - Display owner email address',
+          '  theme <name>   - Switch theme: amber, hacker, matrix, dracula, tokyo-night',
+          '  date           - Show current timestamp',
+          '  clear          - Clear terminal screen'
         ].join('\n');
         break;
 
       case 'whoami':
-        output = `${config.personal.name} | ${config.personal.role}\nCollege: ${config.personal.college}\nLocation: ${config.personal.location}\nStatus: ${config.personal.availability}`;
+        output = `${config.personal.name} (${config.personal.brand})\nRole:     ${config.personal.role}\nCollege:  ${config.personal.college}\nLocation: ${config.personal.location}\nStatus:   ${config.personal.availability}`;
         break;
 
       case 'about':
@@ -99,14 +99,14 @@ function Terminal() {
             (p) => p.number === query || p.number === `0${query}` || p.title.toLowerCase().includes(query)
           );
           if (target) {
-            output = `[${target.number}] ${target.title} (${target.subtitle})\nStack: ${target.tags.join(', ')}\nDetails: ${target.description}\nCode: ${target.github}${target.live ? `\nLive: ${target.live}` : ''}`;
+            output = `[${target.number}] ${target.title} — ${target.subtitle}\nTech Stack:  ${target.tags.join(', ')}\nDescription: ${target.description}\nCode:        ${target.github}${target.live ? `\nLive Demo:   ${target.live}` : ''}`;
           } else {
-            output = `Project not found. Type 'projects' to list all.`;
+            output = `Project '${args.join(' ')}' not found. Type 'projects' to see all list.`;
           }
         } else {
           output = config.projects
             .map((p) => `  ${p.number}. ${p.title} — ${p.subtitle}`)
-            .join('\n') + `\n\n(Tip: type 'projects <number>' to view details)`;
+            .join('\n') + `\n\nType 'projects <number>' (e.g. 'projects 1') for full project details.`;
         }
         break;
 
@@ -117,7 +117,7 @@ function Terminal() {
         const num = `0${cmd}`;
         const target = config.projects.find((p) => p.number === num);
         if (target) {
-          output = `[${target.number}] ${target.title} (${target.subtitle})\nStack: ${target.tags.join(', ')}\nDetails: ${target.description}\nCode: ${target.github}${target.live ? `\nLive: ${target.live}` : ''}`;
+          output = `[${target.number}] ${target.title} — ${target.subtitle}\nTech Stack:  ${target.tags.join(', ')}\nDescription: ${target.description}\nCode:        ${target.github}${target.live ? `\nLive Demo:   ${target.live}` : ''}`;
         }
         break;
       }
@@ -129,7 +129,7 @@ function Terminal() {
           'BACKEND:   Node.js, Express.js, REST APIs, Socket.io',
           'DATABASES: PostgreSQL, MongoDB, Supabase, SQLite',
           'TOOLS:     Git, GitHub, Docker, Postman, Figma, Vercel',
-          'AI:        Gemini API, Claude API, OpenAI API, Groq'
+          'AI:        Google Gemini API, Claude API, OpenAI API, Groq'
         ].join('\n');
         break;
 
@@ -154,7 +154,7 @@ function Terminal() {
 
       case 'resume':
         window.open(config.personal.resumePath, '_blank', 'noopener,noreferrer');
-        output = `Opening resume: ${config.personal.resumePath} ...`;
+        output = `Opening Resume: ${config.personal.resumePath} ...`;
         break;
 
       case 'contact': {
@@ -184,7 +184,7 @@ function Terminal() {
       case 'theme': {
         if (args.length === 0) {
           const current = document.documentElement.getAttribute('data-theme') || 'amber';
-          output = `Current theme: ${current}\nAvailable themes: ${THEMES.join(', ')}\nUsage: theme <name>`;
+          output = `Current theme: ${current}\nAvailable themes: ${THEMES.join(', ')}\nUsage: theme <name> (e.g. 'theme hacker')`;
         } else {
           const chosen = args[0].toLowerCase();
           if (THEMES.includes(chosen)) {
@@ -203,7 +203,15 @@ function Terminal() {
         break;
 
       default:
-        output = `Command not found: ${cmd}. Type 'help' for available commands.`;
+        // Match project title if typed directly
+        const matchedProj = config.projects.find(
+          (p) => p.title.toLowerCase() === trimmed.toLowerCase()
+        );
+        if (matchedProj) {
+          output = `[${matchedProj.number}] ${matchedProj.title} — ${matchedProj.subtitle}\nTech Stack:  ${matchedProj.tags.join(', ')}\nDescription: ${matchedProj.description}\nCode:        ${matchedProj.github}${matchedProj.live ? `\nLive Demo:   ${matchedProj.live}` : ''}`;
+        } else {
+          output = `Command not found: ${cmd}. Type 'help'.`;
+        }
         break;
     }
 
@@ -240,6 +248,16 @@ function Terminal() {
       e.preventDefault();
       const current = inputVal.trim().toLowerCase();
       if (!current) return;
+
+      if (current.startsWith('theme ')) {
+        const sub = current.slice(6).trim();
+        const themeMatch = THEMES.find((t) => t.startsWith(sub));
+        if (themeMatch) {
+          setInputVal(`theme ${themeMatch}`);
+        }
+        return;
+      }
+
       const match = COMMANDS.find((c) => c.startsWith(current));
       if (match) {
         setInputVal(match);
