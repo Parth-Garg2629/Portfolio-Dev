@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
-import { Send, CheckCircle, Github, Linkedin, Mail, MapPin, Link2 } from 'lucide-react';
+import { Send, CheckCircle, Github, Linkedin, Mail, MapPin, AlertCircle } from 'lucide-react';
+import config from '../config';
 
-const WEB3FORMS_ACCESS_KEY = "YOUR_WEB3FORMS_KEY"; // Placeholder to be replaced by the user
+const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || '';
 
 function Contact() {
+  const { name: ownerName, email: ownerEmail, githubUsername, githubUrl, linkedinUrl, location } = config.personal;
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    subject: '',
     message: ''
   });
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
+
+  const isConfigured = Boolean(WEB3FORMS_ACCESS_KEY && WEB3FORMS_ACCESS_KEY.trim() !== '');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,6 +24,10 @@ function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isConfigured) {
+      return;
+    }
+
     setStatus('loading');
 
     try {
@@ -31,8 +41,8 @@ function Contact() {
           access_key: WEB3FORMS_ACCESS_KEY,
           name: formData.name,
           email: formData.email,
-          message: formData.message,
-          subject: `Portfolio Contact from ${formData.name}`
+          subject: formData.subject || `Portfolio Contact from ${formData.name}`,
+          message: formData.message
         })
       });
 
@@ -40,7 +50,7 @@ function Contact() {
 
       if (result.success) {
         setStatus('success');
-        setFormData({ name: '', email: '', message: '' });
+        setFormData({ name: '', email: '', subject: '', message: '' });
       } else {
         throw new Error(result.message || 'Something went wrong');
       }
@@ -61,25 +71,25 @@ function Contact() {
     {
       icon: <Github size={20} />,
       label: "GITHUB",
-      value: "Raghvendrasingh-CS",
-      href: "https://github.com/Raghvendrasingh-CS"
+      value: githubUsername,
+      href: githubUrl
     },
     {
       icon: <Linkedin size={20} />,
       label: "LINKEDIN",
       value: "Connect with me",
-      href: "https://www.linkedin.com/in/raghvendra-singh-850399323"
+      href: linkedinUrl
     },
     {
       icon: <Mail size={20} />,
       label: "EMAIL",
-      value: "chronix6996@gmail.com",
-      href: "mailto:chronix6996@gmail.com"
+      value: ownerEmail,
+      href: `mailto:${ownerEmail}`
     },
     {
       icon: <MapPin size={20} />,
       label: "LOCATION",
-      value: "Ganganagar, Rajasthan 🇮🇳",
+      value: location,
       href: null
     }
   ];
@@ -89,7 +99,7 @@ function Contact() {
       <div className="container">
         {/* Section Header */}
         <div className="section-header reveal">
-          <span className="section-label">06.</span>
+          <span className="section-label">08.</span>
           <h2 className="section-title">Get In Touch</h2>
         </div>
 
@@ -99,14 +109,26 @@ function Contact() {
 
         {/* Layout Column */}
         <div className="contact-grid">
-          {/* Left Column: Form */}
+          {/* Left Column: Form or Unconfigured Graceful State */}
           <div className="contact-left reveal stagger-2">
-            {status === 'success' ? (
+            {!isConfigured ? (
+              <div className="contact-unconfigured-card">
+                <AlertCircle size={40} className="unconfigured-icon" />
+                <h3 className="unconfigured-heading">Contact Form Offline</h3>
+                <p className="unconfigured-subtext">
+                  The contact form is not configured yet. Please email me directly instead:
+                </p>
+                <a href={`mailto:${ownerEmail}`} className="btn btn-primary" style={{ marginTop: '16px' }}>
+                  <Mail size={16} />
+                  Email {ownerEmail}
+                </a>
+              </div>
+            ) : status === 'success' ? (
               <div className="contact-success-card">
                 <CheckCircle size={48} className="success-icon" />
                 <h3 className="success-heading">Message Sent!</h3>
                 <p className="success-subtext">
-                  Thank you for reaching out. Raghvendra will get back to you as soon as possible.
+                  Thank you for reaching out. {ownerName} will get back to you as soon as possible.
                 </p>
                 <a href="#" className="success-link" onClick={handleResetForm}>
                   Send another message
@@ -145,6 +167,21 @@ function Contact() {
                 </div>
 
                 <div className="form-group">
+                  <label htmlFor="subject" className="form-label">Subject</label>
+                  <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    placeholder="Project inquiry / Opportunity / Feedback"
+                    required
+                    className="form-input"
+                    disabled={status === 'loading'}
+                  />
+                </div>
+
+                <div className="form-group">
                   <label htmlFor="message" className="form-label">Message</label>
                   <textarea
                     id="message"
@@ -161,7 +198,7 @@ function Contact() {
 
                 {status === 'error' && (
                   <div className="contact-error-msg">
-                    Failed to send message. Please try again.
+                    Failed to send message. Please try again or email directly.
                   </div>
                 )}
 

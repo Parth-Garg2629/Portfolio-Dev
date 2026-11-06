@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { GitFork, Linkedin, ArrowDown, Sparkles } from 'lucide-react';
-
-const words = [
-  "Developer",
-  "Programmer",
-  "Aspiring Software Engineer",
-  "Designer",
-  "Open Source Contributor"
-];
+import { GitFork, Linkedin, ArrowDown, FileText, ArrowRight } from 'lucide-react';
+import config from '../config';
 
 function Hero() {
+  const { typewriterWords, stats } = config.hero;
+  const { name, githubUrl, linkedinUrl, resumePath, availability } = config.personal;
+
   const [text, setText] = useState('');
   const [wordIndex, setWordIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [speed, setSpeed] = useState(150);
 
+  const words = typewriterWords && typewriterWords.length > 0
+    ? typewriterWords
+    : ["Full-Stack Developer", "Programmer"];
+
   useEffect(() => {
     const currentWord = words[wordIndex];
+    if (!currentWord) return;
     
     const handleTyping = () => {
       if (!isDeleting) {
@@ -41,7 +42,7 @@ function Hero() {
 
     const timer = setTimeout(handleTyping, speed);
     return () => clearTimeout(timer);
-  }, [text, isDeleting, speed, wordIndex]);
+  }, [text, isDeleting, speed, wordIndex, words]);
 
   const scrollToSection = (e, targetId) => {
     e.preventDefault();
@@ -60,6 +61,10 @@ function Hero() {
     }
   };
 
+  const nameParts = name.split(' ');
+  const firstName = nameParts[0] || 'Raghvendra';
+  const lastName = nameParts.slice(1).join(' ') || 'Singh';
+
   return (
     <section className="hero-section" id="hero">
       {/* Background Effects */}
@@ -69,47 +74,62 @@ function Hero() {
       <div className="container hero-container">
         {/* Availability Badge */}
         <div className="availability-badge reveal">
-          {/* <span className="green-dot-pulse"></span> */}
-          {/* Available for internship & freelance */}
+          <span className="green-dot-pulse"></span>
+          <span>{availability}</span>
         </div>
 
         {/* Name */}
         <h1 className="hero-name reveal stagger-1">
-          Raghvendra <br className="mobile-only" />
-          <span className="gradient-text">Singh</span>
+          {firstName} <br className="mobile-only" />
+          <span className="gradient-text">{lastName}</span>
         </h1>
 
         {/* Terminal Typing Line */}
         <div className="typing-container reveal stagger-2">
-          <span className="typing-prefix"> </span>
+          <span className="typing-prefix">&gt;&nbsp;</span>
           <span className="typing-text">{text}</span>
           <span className="typing-cursor"></span>
         </div>
 
         {/* Bio */}
         <p className="hero-bio reveal stagger-3">
-          CS student building AI-powered products. Currently working on an AI fashion styling app and learning to ship things people actually use.
+          CS student at IIIT Kota building production-ready, AI-powered products. Currently exploring multi-agent architectures, scalable backends, and shipping clean software that solves real problems.
         </p>
 
         {/* CTA Buttons */}
         <div className="hero-ctas reveal stagger-4">
-          <button className="btn btn-primary" onClick={(e) => scrollToSection(e, 'experience')}>
-            View My Work &rarr;
+          <a
+            href={resumePath}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-primary"
+          >
+            <FileText size={18} />
+            View Resume
+          </a>
+          <button
+            className="btn btn-outline"
+            onClick={(e) => scrollToSection(e, 'projects')}
+          >
+            Projects
+            <ArrowRight size={16} />
           </button>
           <a
-            href="https://github.com/Raghvendrasingh-CS"
+            href={githubUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-outline"
+            aria-label="GitHub Profile"
           >
             <GitFork size={18} />
             GitHub
           </a>
           <a
-            href="https://www.linkedin.com/in/raghvendra-singh-850399323" // We will make this clear to fill in
+            href={linkedinUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-outline"
+            aria-label="LinkedIn Profile"
           >
             <Linkedin size={18} />
             LinkedIn
@@ -118,22 +138,21 @@ function Hero() {
 
         {/* Stats Strip */}
         <div className="stats-strip reveal stagger-5">
-          <div className="stat-item">
-            <span className="stat-value">5+</span>
-            <span className="stat-label">// PROJECTS BUILT</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-value">20+</span>
-            <span className="stat-label">// TECH STACKS</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-value">AI</span>
-            <span className="stat-label">// POWERED APPS</span>
-          </div>
+          {stats.map((st, idx) => (
+            <div className="stat-item" key={idx}>
+              <span className="stat-value">{st.value}</span>
+              <span className="stat-label">// {st.label}</span>
+            </div>
+          ))}
         </div>
 
         {/* Scroll Hint */}
-        <a href="#about" className="scroll-hint" onClick={(e) => scrollToSection(e, 'about')} aria-label="Scroll down">
+        <a
+          href="#about"
+          className="scroll-hint"
+          onClick={(e) => scrollToSection(e, 'about')}
+          aria-label="Scroll down to About"
+        >
           <ArrowDown size={20} />
         </a>
       </div>
