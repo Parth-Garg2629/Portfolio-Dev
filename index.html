@@ -21,7 +21,7 @@
     <meta name="twitter:description" content="Full-Stack Developer and B.Tech CSE student at IIIT Kota. Building things that actually work, one commit at a time." />
     <meta name="twitter:image" content="https://chronix-dev.vercel.app/og-image.png" />
     <meta name="theme-color" content="#E8A33D" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.8em' font-size='75' fill='%23E8A33D' font-family='monospace'>//</text></svg>" />
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -48,30 +48,30 @@
         left: 0;
         background-color: #141414;
         z-index: 9999;
-        transition: opacity 0.5s ease-out;
+        transition: opacity 0.4s ease-out;
       }
       .loader-logo {
         font-family: 'JetBrains Mono', monospace;
-        font-size: 2rem;
+        font-size: 1.8rem;
         color: #E8A33D;
         margin-bottom: 20px;
         letter-spacing: -1px;
       }
       .loader-bar {
-        width: 120px;
-        height: 3px;
-        background-color: #2E2A24;
-        border-radius: 3px;
+        width: 100px;
+        height: 2px;
+        background-color: #2A251D;
+        border-radius: 2px;
         position: relative;
         overflow: hidden;
       }
       .loader-progress {
         width: 40%;
         height: 100%;
-        background: linear-gradient(90deg, #E8A33D, #F2BC6B);
+        background-color: #E8A33D;
         position: absolute;
-        animation: loading-slide 1.5s infinite ease-in-out;
-        border-radius: 3px;
+        animation: loading-slide 1.4s infinite ease-in-out;
+        border-radius: 2px;
       }
       @keyframes loading-slide {
         0% { left: -40%; }

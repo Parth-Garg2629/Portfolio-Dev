@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Send, CheckCircle, Github, Linkedin, Mail, MapPin, AlertCircle } from 'lucide-react';
 import config from '../config';
 
 const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || '';
@@ -24,9 +23,7 @@ function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isConfigured) {
-      return;
-    }
+    if (!isConfigured) return;
 
     setStatus('loading');
 
@@ -57,7 +54,6 @@ function Contact() {
     } catch (err) {
       console.error(err);
       setStatus('error');
-      // Auto-revert error to idle after 4 seconds
       setTimeout(() => setStatus('idle'), 4000);
     }
   };
@@ -67,31 +63,11 @@ function Contact() {
     setStatus('idle');
   };
 
-  const infoCards = [
-    {
-      icon: <Github size={20} />,
-      label: "GITHUB",
-      value: githubUsername,
-      href: githubUrl
-    },
-    {
-      icon: <Linkedin size={20} />,
-      label: "LINKEDIN",
-      value: "Connect with me",
-      href: linkedinUrl
-    },
-    {
-      icon: <Mail size={20} />,
-      label: "EMAIL",
-      value: ownerEmail,
-      href: `mailto:${ownerEmail}`
-    },
-    {
-      icon: <MapPin size={20} />,
-      label: "LOCATION",
-      value: location,
-      href: null
-    }
+  const infoItems = [
+    { label: "GITHUB", value: githubUsername, href: githubUrl },
+    { label: "LINKEDIN", value: "raghvendra-singh", href: linkedinUrl },
+    { label: "EMAIL", value: ownerEmail, href: `mailto:${ownerEmail}` },
+    { label: "LOCATION", value: location, href: null }
   ];
 
   return (
@@ -103,32 +79,28 @@ function Contact() {
           <h2 className="section-title">Get In Touch</h2>
         </div>
 
-        <p className="contact-subtext reveal stagger-1">
-          Open to internship roles, freelance projects, and interesting collaborations.
+        <p className="section-intro reveal">
+          Direct communication line for projects, internships, and engineering queries.
         </p>
 
-        {/* Layout Column */}
-        <div className="contact-grid">
-          {/* Left Column: Form or Unconfigured Graceful State */}
-          <div className="contact-left reveal stagger-2">
+        <div className="contact-grid reveal">
+          {/* Form */}
+          <div className="contact-left">
             {!isConfigured ? (
               <div className="contact-unconfigured-card">
-                <AlertCircle size={40} className="unconfigured-icon" />
                 <h3 className="unconfigured-heading">Contact Form Offline</h3>
                 <p className="unconfigured-subtext">
-                  The contact form is not configured yet. Please email me directly instead:
+                  The contact form is currently unconfigured. Send an email directly:
                 </p>
                 <a href={`mailto:${ownerEmail}`} className="btn btn-primary" style={{ marginTop: '16px' }}>
-                  <Mail size={16} />
                   Email {ownerEmail}
                 </a>
               </div>
             ) : status === 'success' ? (
               <div className="contact-success-card">
-                <CheckCircle size={48} className="success-icon" />
-                <h3 className="success-heading">Message Sent!</h3>
+                <h3 className="success-heading">Message Sent</h3>
                 <p className="success-subtext">
-                  Thank you for reaching out. {ownerName} will get back to you as soon as possible.
+                  Thank you for reaching out. {ownerName} will respond shortly.
                 </p>
                 <a href="#" className="success-link" onClick={handleResetForm}>
                   Send another message
@@ -174,7 +146,7 @@ function Contact() {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    placeholder="Project inquiry / Opportunity / Feedback"
+                    placeholder="Subject line"
                     required
                     className="form-input"
                     disabled={status === 'loading'}
@@ -189,7 +161,7 @@ function Contact() {
                     rows={5}
                     value={formData.message}
                     onChange={handleChange}
-                    placeholder="What's on your mind?"
+                    placeholder="Your message..."
                     required
                     className="form-input form-textarea"
                     disabled={status === 'loading'}
@@ -198,54 +170,41 @@ function Contact() {
 
                 {status === 'error' && (
                   <div className="contact-error-msg">
-                    Failed to send message. Please try again or email directly.
+                    Failed to send message. Please email directly.
                   </div>
                 )}
 
                 <button
                   type="submit"
-                  className="btn btn-primary contact-submit-btn"
+                  className="btn btn-primary"
                   disabled={status === 'loading'}
                 >
-                  {status === 'loading' ? (
-                    'Sending...'
-                  ) : (
-                    <>
-                      <Send size={16} />
-                      Send Message
-                    </>
-                  )}
+                  {status === 'loading' ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
             )}
           </div>
 
-          {/* Right Column: Info Cards */}
-          <div className="contact-right reveal stagger-3">
-            <div className="info-cards-list">
-              {infoCards.map((card, idx) => {
-                const CardWrapper = card.href ? 'a' : 'div';
-                const wrapperProps = card.href
-                  ? {
-                      href: card.href,
-                      target: "_blank",
-                      rel: "noopener noreferrer",
-                      className: "contact-info-card interactive"
-                    }
-                  : { className: "contact-info-card" };
-
-                return (
-                  <CardWrapper key={idx} {...wrapperProps}>
-                    <div className="contact-info-icon-wrapper">
-                      {card.icon}
-                    </div>
-                    <div className="contact-info-details">
-                      <span className="contact-info-label">{card.label}</span>
-                      <span className="contact-info-value">{card.value}</span>
-                    </div>
-                  </CardWrapper>
-                );
-              })}
+          {/* Info Column */}
+          <div className="contact-right">
+            <div className="contact-info-list">
+              {infoItems.map((item, idx) => (
+                <div className="contact-flat-card" key={idx}>
+                  <span className="contact-info-label">{item.label}</span>
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="contact-info-link"
+                    >
+                      {item.value} ↗
+                    </a>
+                  ) : (
+                    <span className="contact-info-val">{item.value}</span>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </div>

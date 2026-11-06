@@ -21,7 +21,7 @@ export const config = {
       "Full-Stack Developer",
       "Programmer"
     ],
-    bio: "CS student at IIIT Kota building production-ready, AI-powered products. Currently exploring multi-agent workflows, scalable backend architectures, and shipping clean software that solves real problems.",
+    bio: "CS student at IIIT Kota. I build web apps with React and Node.js — an AI support platform, a virtual try-on tool, and this site are my recent ones. On campus I help run Eigen, our tech fest, with the TechKnow Council.",
     stats: [
       { value: "3+", label: "PROJECTS SHIPPED" },
       { value: "250+", label: "DSA PROBLEMS" },
@@ -34,30 +34,12 @@ export const config = {
     long: [
       "I'm Raghvendra Singh, a Computer Science undergraduate at IIIT Kota focused on building production ready full stack applications powered by AI. I enjoy designing scalable backend systems, building intuitive user experiences, and turning ideas into software that people can rely on.",
       "Over the past 6 months I've built projects ranging from multi agent AI platforms to intelligent virtual styling applications, working with React, Node.js, Express, Docker, REST APIs, databases, and modern AI technologies. I enjoy solving engineering problems that require both thoughtful system design and attention to detail.",
-      "I believe the best outcomes come from people who genuinely care about the work, the people they work with, and doing things the right way. Whether I'm leading a team or contributing as a teammate, I value ownership, clear communication, and building software that everyone can be proud of."
+      "Outside of code, I organise gaming tournaments with Clutch E-Sports — running a 64-team double-elimination bracket is its own kind of engineering. I also spend a fair amount of time on CodeChef and LeetCode, mostly C++."
     ],
     tags: [
-      "Kota, Rajasthan, India 🇮🇳",
+      "Kota, Rajasthan, India",
       "Open to Internships",
       "IIIT Kota CSE '28"
-    ],
-    traits: [
-      {
-        title: "Learn",
-        desc: "Always exploring better tools, better systems, and better engineering."
-      },
-      {
-        title: "Build",
-        desc: "Turning ideas into production ready software."
-      },
-      {
-        title: "Lead",
-        desc: "Taking ownership when needed and supporting the team at every stage."
-      },
-      {
-        title: "Improve",
-        desc: "Iterating continuously through feedback, experimentation, and curiosity."
-      }
     ]
   },
 
@@ -88,7 +70,7 @@ export const config = {
       number: "03",
       title: "AI Style Mirror",
       subtitle: "Virtual Try-On Platform",
-      description: "AI-driven virtual fashion try-on application featuring body morphology analysis, HTML5 Canvas virtual apparel fitting, and contextual styling recommendations.",
+      description: "AI-driven virtual try-on platform — upload a photo, try outfits virtually, and get styling suggestions based on the occasion and weather.",
       tags: ["React", "Node.js", "Express.js", "MongoDB", "JWT"],
       github: "https://github.com/Chronix6996",
       live: "https://ai-style-mirror.vercel.app/",
@@ -125,7 +107,6 @@ export const config = {
 
   experience: [
     {
-      emoji: "🎓",
       role: "B.Tech in Computer Science & Engineering",
       org: "IIIT Kota (Indian Institute of Information Technology Kota)",
       period: "2024 – 2028",
@@ -140,7 +121,6 @@ export const config = {
       link: null
     },
     {
-      emoji: "⚡",
       role: "General Secretary — Senior Executive",
       org: "TechKnow Council, IIIT Kota",
       period: "Aug 2025 – May 2026",
@@ -155,7 +135,6 @@ export const config = {
       link: null
     },
     {
-      emoji: "🎮",
       role: "Event Manager",
       org: "Clutch E-Sports Club, IIIT Kota",
       period: "Aug 2024 – Present",
@@ -185,17 +164,6 @@ export const config = {
     { category: "Design", tool: "Figma" },
     { category: "API Testing", tool: "Postman" },
     { category: "AI APIs", tool: "Claude, Gemini, Groq" }
-  ],
-
-  marquee: [
-    "Full-Stack Developer",
-    "IIIT Kota CSE '28",
-    "React 18 & Vite",
-    "Node.js & Express",
-    "Docker & PostgreSQL",
-    "Gemini & Claude APIs",
-    "250+ DSA Solved",
-    "Built From Scratch"
   ]
 };
 

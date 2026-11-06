@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Marquee from './components/Marquee';
 import About from './components/About';
 import Projects from './components/Projects';
 import Experience from './components/Experience';
@@ -31,14 +30,14 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Intersection Observer to handle reveal-on-scroll animations
+  // Intersection Observer for subtle below-fold reveal
   useEffect(() => {
     const revealElements = document.querySelectorAll('.reveal');
 
     const observerOptions = {
       root: null,
-      rootMargin: '0px 0px -80px 0px',
-      threshold: 0.1
+      rootMargin: '0px 0px -40px 0px',
+      threshold: 0.05
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -56,25 +55,6 @@ function App() {
     };
   }, []);
 
-  // Ambient Cursor Glow for Desktop (Disabled on touch or reduced motion)
-  useEffect(() => {
-    // Check if device supports fine hover
-    const isTouch = window.matchMedia('(hover: none) or (pointer: coarse)').matches;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (isTouch || prefersReducedMotion) return;
-
-    const glow = document.getElementById('cursor-glow');
-    if (!glow) return;
-
-    const move = (e) => {
-      glow.style.left = `${e.clientX}px`;
-      glow.style.top = `${e.clientY}px`;
-    };
-
-    window.addEventListener('mousemove', move);
-    return () => window.removeEventListener('mousemove', move);
-  }, []);
-
   return (
     <div className="app-container">
       {/* 3px Top Scroll Progress Bar */}
@@ -87,8 +67,6 @@ function App() {
         aria-valuemax="100"
       />
 
-      <div id="cursor-glow" className="cursor-glow" aria-hidden="true" />
-
       {/* Fixed Side Rails (Desktop 1024px+) */}
       <SideRails />
 
@@ -96,7 +74,6 @@ function App() {
 
       <main>
         <Hero />
-        <Marquee />
         <About />
         <Projects />
         <Experience />

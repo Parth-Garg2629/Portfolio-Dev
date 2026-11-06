@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { GitFork, Star, Users, FolderGit2, ExternalLink } from 'lucide-react';
 import config from '../config';
 
 function GitHubActivity() {
@@ -8,7 +7,6 @@ function GitHubActivity() {
   const [topRepos, setTopRepos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState(false);
-  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -29,8 +27,7 @@ function GitHubActivity() {
         if (!isMounted) return;
         setUserStats({
           publicRepos: user.public_repos || 0,
-          followers: user.followers || 0,
-          following: user.following || 0
+          followers: user.followers || 0
         });
 
         const sorted = (Array.isArray(repos) ? repos : [])
@@ -60,134 +57,75 @@ function GitHubActivity() {
           <h2 className="section-title">GitHub Activity</h2>
         </div>
 
-        <p className="github-subtext reveal stagger-1">
-          Open source contributions, public repositories, and live telemetry from GitHub.
+        <p className="section-intro reveal">
+          Public telemetry and repositories from @{githubUsername}.
         </p>
 
         {loading ? (
           <div className="github-loading-state reveal">
-            <span className="terminal-prompt">&gt;</span>
-            <span className="github-loading-text">Fetching GitHub data…</span>
+            <span className="terminal-prompt">&gt;</span> Fetching GitHub data…
           </div>
         ) : apiError ? (
-          <div className="github-fallback-card reveal">
-            <FolderGit2 size={32} className="github-fallback-icon" />
-            <h3 className="github-fallback-title">GitHub Live Telemetry Offline</h3>
-            <p className="github-fallback-desc">
-              Rate limits or network restrictions prevented live telemetry from loading. You can explore all public repositories directly on GitHub.
-            </p>
+          <div className="github-fallback-line reveal">
+            <span>Unable to load GitHub stats.</span>
             <a
               href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-primary"
-              style={{ marginTop: '16px' }}
+              className="link-mono"
             >
-              <ExternalLink size={16} />
-              View GitHub Profile
+              View Profile ↗
             </a>
           </div>
         ) : (
-          <div className="github-content reveal stagger-2">
-            {/* User Stats Bar */}
+          <div className="github-content reveal">
+            {/* One mono line for counts */}
             {userStats && (
-              <div className="github-stats-bar">
-                <div className="gh-stat-box">
-                  <FolderGit2 size={20} className="gh-stat-icon" />
-                  <div>
-                    <span className="gh-stat-val">{userStats.publicRepos}</span>
-                    <span className="gh-stat-lbl">Public Repositories</span>
-                  </div>
-                </div>
-                <div className="gh-stat-box">
-                  <Users size={20} className="gh-stat-icon" />
-                  <div>
-                    <span className="gh-stat-val">{userStats.followers}</span>
-                    <span className="gh-stat-lbl">Followers</span>
-                  </div>
-                </div>
-                <div className="gh-stat-box">
-                  <GitFork size={20} className="gh-stat-icon" />
-                  <div>
-                    <span className="gh-stat-val">{userStats.following}</span>
-                    <span className="gh-stat-lbl">Following</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Top 4 Repos Grid */}
-            {topRepos.length > 0 && (
-              <div className="github-repos-grid">
-                {topRepos.map((repo) => (
-                  <a
-                    key={repo.id}
-                    href={repo.html_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="gh-repo-card"
-                  >
-                    <div className="gh-repo-top">
-                      <FolderGit2 size={16} className="gh-repo-icon" />
-                      <span className="gh-repo-name">{repo.name}</span>
-                      <ExternalLink size={14} className="gh-repo-ext" />
-                    </div>
-                    <p className="gh-repo-desc">
-                      {repo.description || 'No description provided.'}
-                    </p>
-                    <div className="gh-repo-meta">
-                      {repo.language && (
-                        <span className="gh-repo-lang">
-                          <span className="lang-dot" />
-                          {repo.language}
-                        </span>
-                      )}
-                      <span className="gh-repo-stat">
-                        <Star size={13} /> {repo.stargazers_count}
-                      </span>
-                      <span className="gh-repo-stat">
-                        <GitFork size={13} /> {repo.forks_count}
-                      </span>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            )}
-
-            {/* Contribution Graph */}
-            {!imgError ? (
-              <div className="github-chart-wrapper">
-                <div className="github-chart-header">
-                  <span className="chart-label">// Contribution Activity</span>
-                  <a
-                    href={githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="chart-link"
-                  >
-                    @{githubUsername} <ExternalLink size={12} />
-                  </a>
-                </div>
-                <div className="github-chart-scroll">
-                  <img
-                    src={`https://ghchart.rshah.org/E8A33D/${githubUsername}`}
-                    alt={`Contribution graph for ${githubUsername}`}
-                    className="github-chart-img"
-                    onError={() => setImgError(true)}
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className="github-fallback-card" style={{ marginTop: '20px' }}>
+              <div className="github-counts-line">
+                <span className="github-count-text">
+                  {userStats.publicRepos} public repos &middot; {userStats.followers} followers
+                </span>
                 <a
                   href={githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-primary"
+                  className="link-mono"
                 >
-                  <ExternalLink size={16} />
-                  View GitHub Profile
+                  github.com/{githubUsername} ↗
                 </a>
+              </div>
+            )}
+
+            {/* Top Repos as List Rows */}
+            {topRepos.length > 0 && (
+              <div className="project-rows-table">
+                {topRepos.map((repo) => (
+                  <div className="project-list-row" key={repo.id}>
+                    <div className="project-row-date">
+                      {repo.language || 'Code'}
+                    </div>
+                    <div className="project-row-body">
+                      <h4 className="project-row-title">{repo.name}</h4>
+                      <p className="project-row-desc">
+                        {repo.description || 'Public repository.'}
+                      </p>
+                      <div className="project-row-tags">
+                        <span className="tag-mono">{repo.stargazers_count} stars</span>
+                        <span className="tag-mono">{repo.forks_count} forks</span>
+                      </div>
+                    </div>
+                    <div className="project-row-links">
+                      <a
+                        href={repo.html_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="link-mono"
+                      >
+                        Repo ↗
+                      </a>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>

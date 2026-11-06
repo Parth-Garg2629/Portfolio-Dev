@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Sparkles, RefreshCw, Send, User, Bot, Terminal as TerminalIcon, MessageSquare } from 'lucide-react';
+import { RefreshCw, Send } from 'lucide-react';
 import Terminal from './Terminal';
-import config from '../config';
 
 const starterChips = [
   "What's your main project?",
@@ -94,93 +93,65 @@ function AskMe() {
           <h2 className="section-title">Ask Me</h2>
         </div>
 
-        <p className="askme-subtext reveal stagger-1">
-          Explore my background via natural language conversation with ECHO or execute commands inside the unix terminal.
+        <p className="section-intro reveal">
+          Direct questions via ECHO or bash emulation in the terminal.
         </p>
 
-        {/* Mode Toggle: ECHO AI vs Terminal */}
-        <div className="askme-mode-tabs reveal stagger-1">
+        {/* Mode Toggle: Plain mono text, active tab gets amber underline, no pills */}
+        <div className="askme-text-tabs reveal">
           <button
             type="button"
-            className={`askme-tab-btn ${activeTab === 'echo' ? 'active' : ''}`}
+            className={`askme-tab-link ${activeTab === 'echo' ? 'active' : ''}`}
             onClick={() => setActiveTab('echo')}
           >
-            <MessageSquare size={16} />
-            <span>ECHO AI</span>
-            <span className="tab-pill">Gemini</span>
+            [ ECHO AI ]
           </button>
           <button
             type="button"
-            className={`askme-tab-btn ${activeTab === 'terminal' ? 'active' : ''}`}
+            className={`askme-tab-link ${activeTab === 'terminal' ? 'active' : ''}`}
             onClick={() => setActiveTab('terminal')}
           >
-            <TerminalIcon size={16} />
-            <span>Terminal</span>
-            <span className="tab-pill">CLI</span>
+            [ Terminal ]
           </button>
         </div>
 
         {/* Tab Content */}
         {activeTab === 'terminal' ? (
-          <div className="reveal stagger-2">
+          <div className="reveal">
             <Terminal />
           </div>
         ) : (
-          <div className="chat-container reveal stagger-2">
+          <div className="chat-container reveal">
             <div className="chat-header">
-              <div className="chat-header-left">
-                <div className="chat-avatar-badge">
-                  <Sparkles size={14} />
-                </div>
-                <div className="chat-header-info">
-                  <span className="chat-name">ECHO</span>
-                  <div className="chat-status">
-                    <span className="chat-status-dot"></span>
-                    <span className="chat-status-text">Powered by Gemini</span>
-                  </div>
-                </div>
+              <div className="chat-header-info">
+                <span className="chat-name">ECHO &middot; Portfolio AI</span>
               </div>
-              <div className="chat-header-right">
-                <button
-                  type="button"
-                  className="chat-header-btn"
-                  onClick={handleReset}
-                  title="Reset Chat"
-                  aria-label="Reset conversation"
-                >
-                  <RefreshCw size={16} />
-                </button>
-              </div>
+              <button
+                type="button"
+                className="chat-header-btn"
+                onClick={handleReset}
+                title="Reset conversation"
+                aria-label="Reset conversation"
+              >
+                <RefreshCw size={14} />
+              </button>
             </div>
 
             <div className="chat-messages-area">
               {messages.map((msg, idx) => (
                 <div className={`message-bubble-wrapper ${msg.role}`} key={idx}>
-                  {msg.role === 'assistant' && (
-                    <div className="msg-avatar assistant">
-                      <Bot size={16} />
-                    </div>
-                  )}
+                  <div className="msg-author-tag">
+                    {msg.role === 'assistant' ? 'echo:' : 'you:'}
+                  </div>
                   <div className="message-bubble">{msg.content}</div>
-                  {msg.role === 'user' && (
-                    <div className="msg-avatar user">
-                      <User size={16} />
-                    </div>
-                  )}
                 </div>
               ))}
 
               {isLoading && (
                 <div className="message-bubble-wrapper assistant">
-                  <div className="msg-avatar assistant">
-                    <Bot size={16} />
-                  </div>
+                  <div className="msg-author-tag">echo:</div>
                   <div className="message-bubble">
-                    <div className="typing-dots">
-                      <span className="dot"></span>
-                      <span className="dot"></span>
-                      <span className="dot"></span>
-                    </div>
+                    <span className="chat-loading-dots">thinking...</span>
                   </div>
                 </div>
               )}
@@ -211,7 +182,7 @@ function AskMe() {
             >
               <input
                 type="text"
-                placeholder="Ask me anything about Raghvendra..."
+                placeholder="Ask about projects, skills, or background..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 disabled={isLoading}
@@ -223,7 +194,7 @@ function AskMe() {
                 disabled={!input.trim() || isLoading}
                 aria-label="Send message"
               >
-                <Send size={16} />
+                <Send size={14} />
               </button>
             </form>
           </div>

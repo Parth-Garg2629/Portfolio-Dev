@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { GitFork, Linkedin, ArrowDown, FileText, ArrowRight } from 'lucide-react';
+import { GitFork, Linkedin, FileText, ArrowRight } from 'lucide-react';
 import config from '../config';
 
 function Hero() {
-  const { typewriterWords, stats } = config.hero;
+  const { typewriterWords, stats, bio } = config.hero;
   const { name, githubUrl, linkedinUrl, resumePath, availability } = config.personal;
 
   const [text, setText] = useState('');
@@ -67,44 +67,39 @@ function Hero() {
 
   return (
     <section className="hero-section" id="hero">
-      {/* Background Effects */}
-      <div className="grid-bg-wrapper"></div>
-      <div className="glow-orb hero-glow"></div>
-
       <div className="container hero-container">
-        {/* Availability Badge */}
-        <div className="availability-badge reveal">
-          <span className="green-dot-pulse"></span>
-          <span>{availability}</span>
+        {/* Availability Badge: plain mono text with green dot, no pill background or border */}
+        <div className="availability-badge">
+          <span className="green-dot"></span>
+          <span className="availability-text">{availability}</span>
         </div>
 
-        {/* Name */}
-        <h1 className="hero-name reveal stagger-1">
-          {firstName} <br className="mobile-only" />
-          <span className="gradient-text">{lastName}</span>
+        {/* Name: solid text, surname followed by amber full stop */}
+        <h1 className="hero-name">
+          {firstName} {lastName}<span className="hero-name-dot">.</span>
         </h1>
 
         {/* Terminal Typing Line */}
-        <div className="typing-container reveal stagger-2">
+        <div className="typing-container">
           <span className="typing-prefix">&gt;&nbsp;</span>
           <span className="typing-text">{text}</span>
           <span className="typing-cursor"></span>
         </div>
 
         {/* Bio */}
-        <p className="hero-bio reveal stagger-3">
-          CS student at IIIT Kota building production-ready, AI-powered products. Currently exploring multi-agent architectures, scalable backends, and shipping clean software that solves real problems.
+        <p className="hero-bio">
+          {bio}
         </p>
 
-        {/* CTA Buttons */}
-        <div className="hero-ctas reveal stagger-4">
+        {/* Buttons in one left row: primary = flat amber fill, dark text; others = hairline outline */}
+        <div className="hero-ctas">
           <a
             href={resumePath}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-primary"
           >
-            <FileText size={18} />
+            <FileText size={15} />
             View Resume
           </a>
           <button
@@ -112,7 +107,7 @@ function Hero() {
             onClick={(e) => scrollToSection(e, 'projects')}
           >
             Projects
-            <ArrowRight size={16} />
+            <ArrowRight size={15} />
           </button>
           <a
             href={githubUrl}
@@ -121,7 +116,7 @@ function Hero() {
             className="btn btn-outline"
             aria-label="GitHub Profile"
           >
-            <GitFork size={18} />
+            <GitFork size={15} />
             GitHub
           </a>
           <a
@@ -131,30 +126,22 @@ function Hero() {
             className="btn btn-outline"
             aria-label="LinkedIn Profile"
           >
-            <Linkedin size={18} />
+            <Linkedin size={15} />
             LinkedIn
           </a>
         </div>
 
-        {/* Stats Strip */}
-        <div className="stats-strip reveal stagger-5">
+        {/* Stats: ONE mono line separated by ' / ', small size */}
+        <div className="hero-stats-line">
           {stats.map((st, idx) => (
-            <div className="stat-item" key={idx}>
-              <span className="stat-value">{st.value}</span>
-              <span className="stat-label">// {st.label}</span>
-            </div>
+            <React.Fragment key={idx}>
+              {idx > 0 && <span className="stat-separator">/</span>}
+              <span className="stat-item-inline">
+                <span className="stat-value-inline">{st.value}</span> {st.label}
+              </span>
+            </React.Fragment>
           ))}
         </div>
-
-        {/* Scroll Hint */}
-        <a
-          href="#about"
-          className="scroll-hint"
-          onClick={(e) => scrollToSection(e, 'about')}
-          aria-label="Scroll down to About"
-        >
-          <ArrowDown size={20} />
-        </a>
       </div>
     </section>
   );

@@ -125,7 +125,7 @@ function Terminal() {
       case 'skills':
         output = [
           'LANGUAGES: C++, Python, Java, JavaScript, SQL',
-          'FRONTEND:  React 18, HTML5, CSS3, Vite, Tailwind',
+          'FRONTEND:  React 18, HTML5, CSS3, Vite',
           'BACKEND:   Node.js, Express.js, REST APIs, Socket.io',
           'DATABASES: PostgreSQL, MongoDB, Supabase, SQLite',
           'TOOLS:     Git, GitHub, Docker, Postman, Figma, Vercel',
